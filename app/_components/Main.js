@@ -8,6 +8,7 @@ export default function Main() {
   const [geoLocation, setGeoLocation] = useState({});
   const [locInfo, setLocInfo] = useState({}); // [city, country]
   const [weatherInfo, setWeatherInfo] = useState({}); // [temperature, weather]
+  const [forcastInfo, setForcastInfo] = useState({});
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -33,7 +34,7 @@ export default function Main() {
           axios
             .get(
               // map -> maps
-              `https://map.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
             )
             .then((response) => {
               console.log(response.data);
@@ -60,6 +61,17 @@ export default function Main() {
             .then((error) => {
               console.log(error);
             });
+          // 위도 경도로 날씨 예보 받아오기
+          axios
+            .get(
+              `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
+            )
+            .then((response) => {
+              console.log(response.data);
+            })
+            .then((error) => {
+              console.log(error);
+            });
         };
         fetchWeather();
       }
@@ -69,7 +81,7 @@ export default function Main() {
   return (
     <div className="mx-auto my-0">
       {/* weatherInfo.temperature */}
-      {true ? (
+      {weatherInfo.temperature ? (
         <div className="px-6 py-3">
           <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} />
           <Card info={{ geoLocation, locInfo, weatherInfo, isMyLoc }} className="flex items-center justify-center" />

@@ -14,6 +14,15 @@ const Header = ({ setGeoLocation, setIsMyLoc }) => {
     setIsMyLoc(false);
   };
 
+  const resetToPresentLocation = (e) => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      setGeoLocation({ lat: latitude, lng: longitude });
+      setCity("");
+      setIsMyLoc(true);
+    });
+  };
+
   return (
     <header className="w-full relative">
       <form onSubmit={handleSearch} className="flex items-center gap-2 absolute top-0 right-0">
@@ -26,6 +35,11 @@ const Header = ({ setGeoLocation, setIsMyLoc }) => {
         />
         <button type="submit">
           <img src="/images/search.png" className="w-4 h-4 absolute top-1/2 left-1 -translate-y-1/2" />
+          <div className="w-5 absolute right-1 -translate-y-1/2 -translate-x-1/2" onClick={resetToPresentLocation}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z" />
+            </svg>
+          </div>
         </button>
       </form>
     </header>
