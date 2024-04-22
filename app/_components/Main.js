@@ -4,6 +4,7 @@ import axios from "axios";
 import Header from "./Header";
 
 export default function Main() {
+  const [isMyLoc, setIsMyLoc] = useState(true);
   const [geoLocation, setGeoLocation] = useState({});
   const [locInfo, setLocInfo] = useState({}); // [city, country]
   const [weatherInfo, setWeatherInfo] = useState({}); // [temperature, weather]
@@ -31,7 +32,8 @@ export default function Main() {
         const fetchWeather = async () => {
           axios
             .get(
-              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+              // map -> maps
+              `https://map.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
             )
             .then((response) => {
               console.log(response.data);
@@ -65,11 +67,12 @@ export default function Main() {
   }, [geoLocation]);
 
   return (
-    <div>
-      {weatherInfo.temperature ? (
-        <div>
-          <Header setGeoLocation={setGeoLocation} />
-          <Card info={{ geoLocation, locInfo, weatherInfo }} />
+    <div className="mx-auto my-0">
+      {/* weatherInfo.temperature */}
+      {true ? (
+        <div className="px-6 py-3">
+          <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} />
+          <Card info={{ geoLocation, locInfo, weatherInfo, isMyLoc }} className="flex items-center justify-center" />
         </div>
       ) : (
         <div>로딩</div>
