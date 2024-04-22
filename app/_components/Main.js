@@ -32,10 +32,7 @@ export default function Main() {
         // 도시 국가 정보 받아오기
         const fetchWeather = async () => {
           axios
-            .get(
-              // map -> maps
-              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
-            )
+            .get(`api/geoInfo?lat=${lat}&lng=${lng}`)
             .then((response) => {
               console.log(response.data);
               setLocInfo({
@@ -48,7 +45,7 @@ export default function Main() {
             });
           // 위도 경도로 날씨 정보 받아오기
           axios
-            .get(`api/weatherInfo`)
+            .get(`/api/weatherInfo?lat=${lat}&lng=${lng}`)
             .then((response) => {
               console.log(response.data);
               setWeatherInfo({
@@ -61,9 +58,7 @@ export default function Main() {
             });
           // 위도 경도로 날씨 예보 받아오기
           axios
-            .get(
-              `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=metric&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
-            )
+            .get(`/api/forecastInfo?lat=${lat}&lng=${lng}`)
             .then((response) => {
               console.log(response.data);
             })
