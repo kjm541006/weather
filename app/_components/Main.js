@@ -48,9 +48,7 @@ export default function Main() {
             });
           // 위도 경도로 날씨 정보 받아오기
           axios
-            .get(
-              `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
-            )
+            .get(`api/weatherInfo`)
             .then((response) => {
               console.log(response.data);
               setWeatherInfo({
