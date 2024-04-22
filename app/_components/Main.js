@@ -9,6 +9,7 @@ export default function Main() {
   const [locInfo, setLocInfo] = useState({}); // [city, country]
   const [weatherInfo, setWeatherInfo] = useState({}); // [temperature, weather]
   const [forcastInfo, setForcastInfo] = useState({});
+  const [city, setCity] = useState("");
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -76,8 +77,8 @@ export default function Main() {
       {/* weatherInfo.temperature */}
       {weatherInfo.temperature ? (
         <div className="px-6 py-3">
-          <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} isMyLoc={isMyLoc} />
-          <Card info={{ geoLocation, locInfo, weatherInfo, isMyLoc }} className="flex items-center justify-center" />
+          <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} isMyLoc={isMyLoc} city={city} setCity={setCity} />
+          <Card info={{ geoLocation, locInfo, weatherInfo, isMyLoc, city }} className="flex items-center justify-center" />
         </div>
       ) : (
         <div>로딩</div>

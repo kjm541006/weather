@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Header = ({ setGeoLocation, setIsMyLoc, isMyLoc }) => {
-  const [city, setCity] = useState("");
+const Header = ({ setGeoLocation, setIsMyLoc, isMyLoc, city, setCity }) => {
+  const [inputCity, setInputCity] = useState("");
   const handleSearch = async (e) => {
     e.preventDefault();
     const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${inputCity}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
     );
     const location = response.data.results[0].geometry.location;
     console.log(location);
     setGeoLocation(location);
     setIsMyLoc(false);
+    setCity(inputCity);
   };
 
   const resetToPresentLocation = (e) => {
@@ -20,11 +21,11 @@ const Header = ({ setGeoLocation, setIsMyLoc, isMyLoc }) => {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
         setGeoLocation({ lat: latitude, lng: longitude });
-        setCity("");
+        setInputCity("");
         setIsMyLoc(true);
       });
     } else {
-      setCity("");
+      setInputCity("");
     }
   };
 
@@ -34,8 +35,8 @@ const Header = ({ setGeoLocation, setIsMyLoc, isMyLoc }) => {
         <input
           type="text"
           placeholder="검색"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
+          value={inputCity}
+          onChange={(e) => setInputCity(e.target.value)}
           className="rounded-md px-10 py-1 w-48 text-xs font-normal"
         />
         <button type="submit">
