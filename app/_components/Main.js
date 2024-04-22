@@ -64,7 +64,7 @@ export default function Main() {
           // 위도 경도로 날씨 예보 받아오기
           axios
             .get(
-              `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
+              `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=metric&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
             )
             .then((response) => {
               console.log(response.data);
@@ -83,7 +83,7 @@ export default function Main() {
       {/* weatherInfo.temperature */}
       {weatherInfo.temperature ? (
         <div className="px-6 py-3">
-          <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} />
+          <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} isMyLoc={isMyLoc} />
           <Card info={{ geoLocation, locInfo, weatherInfo, isMyLoc }} className="flex items-center justify-center" />
         </div>
       ) : (
