@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import Card from "./Card";
 import axios from "axios";
+import Header from "./Header";
 
 export default function Main() {
   const [geoLocation, setGeoLocation] = useState({});
@@ -10,8 +12,8 @@ export default function Main() {
       navigator.geolocation.getCurrentPosition((position) => {
         console.log(position);
         setGeoLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
       });
     } else {
@@ -21,53 +23,57 @@ export default function Main() {
 
   useEffect(() => {
     if (geoLocation) {
-      const latitude = geoLocation.latitude;
-      const longitude = geoLocation.longitude;
+      const lat = geoLocation.lat;
+      const lng = geoLocation.lng;
 
-      if (latitude && longitude) {
-        axios
-          .get(
-            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
-          )
-          .then((response) => {
-            console.log(response.data);
-            setLocInfo({
-              city: response.data.results[0]?.formatted_address,
-              country: response.data.results[response.data.results.length - 1]?.formatted_address,
+      if (lat && lng) {
+        // 도시 국가 정보 받아오기
+        const fetchWeather = async () => {
+          axios
+            .get(
+              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&result_type=country|locality&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
+            )
+            .then((response) => {
+              console.log(response.data);
+              setLocInfo({
+                city: response.data.results[0]?.formatted_address,
+                country: response.data.results[response.data.results.length - 1]?.formatted_address,
+              });
+            })
+            .then((error) => {
+              console.log(error);
             });
-          })
-          .then((error) => {
-            console.log(error);
-          });
-
-        axios
-          .get(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
-          )
-          .then((response) => {
-            console.log(response.data);
-            setWeatherInfo({
-              temperature: response.data.main.temp,
-              weather: response.data.weather[0].main,
+          // 위도 경도로 날씨 정보 받아오기
+          axios
+            .get(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`
+            )
+            .then((response) => {
+              console.log(response.data);
+              setWeatherInfo({
+                temperature: response.data.main.temp,
+                weather: response.data.weather[0].main,
+              });
+            })
+            .then((error) => {
+              console.log(error);
             });
-          })
-          .then((error) => {
-            console.log(error);
-          });
+        };
+        fetchWeather();
       }
     }
   }, [geoLocation]);
 
   return (
     <div>
-      <h1>날씨 정보</h1>
-      <p>오늘의 날씨는 {weatherInfo.weather || "알 수 없음"}입니다.</p>
-      <p>오늘의 기온은 {weatherInfo.temperature || "알 수 없음"}°C입니다.</p>
-      <h1>현재 위치</h1>
-      <p>위도: {geoLocation.latitude}</p>
-      <p>경도: {geoLocation.longitude}</p>
-      <p>도시: {locInfo.city || "알 수 없음"}</p>
-      <p>국가: {locInfo.country || "알 수 없음"}</p>
+      {weatherInfo.temperature ? (
+        <div>
+          <Header setGeoLocation={setGeoLocation} />
+          <Card info={{ geoLocation, locInfo, weatherInfo }} />
+        </div>
+      ) : (
+        <div>로딩</div>
+      )}
     </div>
   );
 }
