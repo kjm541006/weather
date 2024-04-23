@@ -1,28 +1,39 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Header = ({ setGeoLocation, setIsMyLoc, isMyLoc, city, setCity }) => {
+const Header = ({ info }) => {
   const [inputCity, setInputCity] = useState("");
   const handleSearch = async (e) => {
     e.preventDefault();
-    const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${inputCity}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`
-    );
-    const location = response.data.results[0].geometry.location;
+    let location = "";
+    await axios
+      .get(`/api/cityInfo?inputCity=${inputCity}`)
+      .then((response) => {
+        console.log("도시 이름으로 위도 경도 반환");
+        location = response.data.results[0].geometry.location;
+        console.log(location);
+      })
+      .catch((error) => {
+        alert("도시 및 나라 정보를 찾을 수 없습니다.");
+        info.setIsCityExist(false);
+        console.log("도시 및 나라 정보를 찾을 수 없음");
+        console.log(error);
+      });
+
     console.log(location);
-    setGeoLocation(location);
-    setIsMyLoc(false);
-    setCity(inputCity);
+    info.setGeoLocation(location);
+    info.setIsMyLoc(false);
+    info.setCity(inputCity);
   };
 
   const resetToPresentLocation = (e) => {
     e.preventDefault();
-    if (!isMyLoc) {
+    if (!info.isMyLoc) {
       navigator.geolocation.getCurrentPosition((position) => {
         const { latitude, longitude } = position.coords;
-        setGeoLocation({ lat: latitude, lng: longitude });
+        info.setGeoLocation({ lat: latitude, lng: longitude });
         setInputCity("");
-        setIsMyLoc(true);
+        info.setIsMyLoc(true);
       });
     } else {
       setInputCity("");
@@ -41,7 +52,7 @@ const Header = ({ setGeoLocation, setIsMyLoc, isMyLoc, city, setCity }) => {
         />
         <button type="submit">
           <img src="/images/search.png" className="w-4 h-4 absolute top-1/2 left-1 -translate-y-1/2" />
-          {(!isMyLoc || city.length !== 0) && (
+          {(!info.isMyLoc || info.city.length !== 0) && (
             <div className="w-5 absolute right-1 -translate-y-1/2 -translate-x-1/2" onClick={resetToPresentLocation}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z" />
