@@ -97,10 +97,8 @@ export default function Main() {
             });
 
             console.log("위도 경도로 날씨 예보 (5일 3시간 간격 정보) 받아오기 openweathermap");
-            console.log(responses[2].data);
+            // console.log(responses[2].data);
             setForecastInfo(responses[2].data.list);
-            console.log(forecastInfo);
-
             setIsLoading(false); // 모든 요청이 완료되면 isLoading을 false로 설정
           } catch (error) {
             console.log(error);
