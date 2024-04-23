@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-// import "./Card.css";
+import React from "react";
 
 const Card = ({ info }) => {
   const cityInfo = info.city;
@@ -15,11 +14,6 @@ const Card = ({ info }) => {
       ) : (
         <p>도시 및 국가를 찾지 못했습니다.</p>
       )}
-      {/* <h1>현재 위치</h1>
-      <p>위도: {info.geoLocation.lat}</p>
-      <p>경도: {info.geoLocation.lng}</p>
-      <p>도시: {info.locInfo.city || "알 수 없음"}</p>
-      <p>국가: {info.locInfo.country || "알 수 없음"}</p> */}
     </div>
   );
 };
