@@ -74,8 +74,7 @@ export default function Main() {
         //     });
         // };
         const fetchWeather = async () => {
-          setIsLoading(true); // 요청 시작 전에 isLoading을 true로 설정
-
+          setIsLoading(true);
           try {
             const geoInfoResponse = axios.get(`api/geoInfo?lat=${lat}&lng=${lng}`);
             const weatherResponse = axios.get(`/api/weatherInfo?lat=${lat}&lng=${lng}`);
@@ -99,6 +98,8 @@ export default function Main() {
 
             console.log("위도 경도로 날씨 예보 (5일 3시간 간격 정보) 받아오기 openweathermap");
             console.log(responses[2].data);
+            setForecastInfo(responses[2].data.list);
+            console.log(forecastInfo);
 
             setIsLoading(false); // 모든 요청이 완료되면 isLoading을 false로 설정
           } catch (error) {
@@ -118,7 +119,10 @@ export default function Main() {
         <div className="px-6 py-3">
           {/* <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} isMyLoc={isMyLoc} city={city} setCity={setCity} setIsCityExist={setIsCityExist}  /> */}
           <Header info={{ setGeoLocation, setIsMyLoc, isMyLoc, city, setCity, setIsCityExist, setIsLoading }} />
-          <Card info={{ geoLocation, locInfo, weatherInfo, isMyLoc, city, isCityExist }} className="flex items-center justify-center" />
+          <Card
+            info={{ geoLocation, locInfo, weatherInfo, isMyLoc, city, isCityExist, forecastInfo }}
+            className="flex items-center justify-center"
+          />
         </div>
       ) : (
         <Loading />
