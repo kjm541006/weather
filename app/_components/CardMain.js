@@ -1,5 +1,5 @@
 import React from "react";
-import CardMainStyle from "./CardMainStyle.css";
+import "./CardMainStyle.css";
 
 const CardMain = ({ info }) => {
   return (
@@ -7,7 +7,7 @@ const CardMain = ({ info }) => {
       {info.isCityExist && (
         <>
           <div className="text-lg font-bold mb-2">예보</div>
-          <div className="flex gap-6 overflow-x-auto whitespace-nowrap bg-blue-300 rounded-md p-4 pb-3 scrollbar">
+          <div className="flex gap-6 overflow-x-auto whitespace-nowrap bg-blue-300 rounded-lg p-4 pb-3 scrollbar">
             {info.forecastInfo?.map((forecast) => {
               const dateString = forecast.dt;
               const date = new Date(dateString * 1000);
