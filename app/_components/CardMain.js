@@ -8,15 +8,6 @@ const CardMain = ({ info }) => {
     <>
       {info.isCityExist && (
         <>
-<<<<<<< HEAD
-          <div className="text-lg font-bold mb-2">예보</div>
-          <div className="flex gap-6 overflow-x-auto whitespace-nowrap bg-blue-300 rounded-lg p-4 pb-3 scrollbar">
-            {info.forecastInfo?.map((forecast) => {
-              const dateString = forecast.dt;
-              const date = new Date(dateString * 1000);
-              const day = date.toLocaleDateString("ko-KR", { day: "numeric" });
-              const hour = date.toLocaleTimeString("ko-KR", { hour: "2-digit", hour12: true });
-=======
           <div className="text-lg font-bold mb-2">예보 (시간은 로컬타임 입니다)</div>
           <div className="flex gap-6 overflow-x-auto whitespace-nowrap bg-blue-300 rounded-md p-4 pb-3 scrollbar">
             {info.forecastInfo.list.map((forecast) => {
@@ -39,7 +30,6 @@ const CardMain = ({ info }) => {
               });
               const [{ value: day }, , { value: hour }] = dateTimeFormat.formatToParts(dateObject);
 
->>>>>>> 59e94c64fcfea51296432ee9d39cdbf2916f98e0
               return (
                 <div key={forecast.dt} className="flex flex-col items-center gap-3 mx-8 my-4">
                   {/* <div>시간 : {forecast.dt_txt}</div> */}
