@@ -35,7 +35,7 @@ const CardMain = ({ info }) => {
               const [{ value: weekday }, , { value: day }, , { value: hour }] = dateTimeFormat.formatToParts(dateObject);
 
               return (
-                <div key={forecast.dt} className="flex flex-col items-center gap-3 mx-8 my-4">
+                <div key={forecast.dt} className="flex flex-col items-center gap-2 mx-4 my-4">
                   {/* <div>시간 : {forecast.dt_txt}</div> */}
                   <div className="text-white font-semibold text-md">{`${weekday}일(${day}) ${hour}시`}</div>
                   {forecast.weather[0].main === "Clouds" && <img src="/images/clouds.png" className="w-16 h-16" alt="구름" />}
