@@ -52,6 +52,21 @@ const CardMain = ({ info }) => {
               );
             })}
           </div>
+          <div className="grid grid-rows-4 grid-cols-6 gap-4 w-auto mt-4 h-[80vh]">
+            <div className="row-span-3 col-span-2 bg-red-400 rounded-md">01</div>
+            <div className="col-span-2 bg-red-400 rounded-md">대기질</div>
+            <div className="row-span-2 col-span-2 bg-red-400 rounded-md">02</div>
+            <div className="col-span-2 bg-red-400 rounded-md">바람</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="col-span-2 bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+            <div className="bg-red-400 rounded-md">04</div>
+          </div>
         </>
       )}
     </>
