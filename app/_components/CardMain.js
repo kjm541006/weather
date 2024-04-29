@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./CardMainStyle.css";
 
 const CardMain = ({ info }) => {
   const countryCode = info.forecastInfo.city.country;
   const timeZone = info.forecastInfo.city.timezone;
+  const scrollbarRef = useRef();
+  useEffect(() => {
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isSafari) {
+      scrollbarRef.current.classList.add("safari");
+    } else {
+      scrollbarRef.current.classList.add("not-safari");
+    }
+  }, []);
+
   return (
     <>
       {info.isCityExist && (
         <>
           <div className="text-md font-bold mb-2">예보 ({info.isMyLoc ? "" : info.city + " "}현지 시간 기준)</div>
-          <div className="flex gap-1 overflow-x-auto whitespace-nowrap scrollbar bg-blue-300 rounded-md">
+          <div ref={scrollbarRef} className="flex gap-1 overflow-x-auto whitespace-nowrap scrollbar bg-blue-300 rounded-md">
             {info.forecastInfo.list.map((forecast) => {
               // 밀리초 단위의 Unix 타임스탬프를 Date 객체로 변환
               const dateObject = new Date((forecast.dt + timeZone) * 1000);
