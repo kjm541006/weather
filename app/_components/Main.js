@@ -79,6 +79,7 @@ export default function Main() {
             const geoInfoResponse = axios.get(`api/geoInfo?lat=${lat}&lng=${lng}`);
             const weatherResponse = axios.get(`/api/weatherInfo?lat=${lat}&lng=${lng}`);
             const forecastResponse = axios.get(`/api/forecastInfo?lat=${lat}&lng=${lng}`);
+            // const airPollutionResponse = axios.get(`/api/airPollutionInfo?lat=${lat}&lng=${lng}`);
 
             const responses = await Promise.all([geoInfoResponse, weatherResponse, forecastResponse]);
 
