@@ -1,9 +1,34 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./CardMainStyle.css";
 
 const CardMain = ({ info }) => {
   const countryCode = info.forecastInfo.city.country;
   const timeZone = info.forecastInfo.city.timezone;
+  const [pm10Info, setPm10Info] = useState({});
+  const [pm25Info, setPm25Info] = useState({});
+
+  useEffect(() => {
+    if (info.airpollutionInfo.list[0].components.pm10 < 30) {
+      setPm10Info({ status: "좋음", class: "text-blue-500" });
+    } else if (info.airpollutionInfo.list[0].components.pm10 < 80) {
+      setPm10Info({ status: "보통", class: "text-black" });
+    } else if (info.airpollutionInfo.list[0].components.pm10 < 150) {
+      setPm10Info({ status: "나쁨", class: "text-orange-500" });
+    } else {
+      setPm10Info({ status: "매우 나쁨", class: "text-red-500" });
+    }
+
+    if (info.airpollutionInfo.list[0].components.pm2_5 < 15) {
+      setPm25Info({ status: "좋음", class: "text-blue-500" });
+    } else if (info.airpollutionInfo.list[0].components.pm2_5 < 35) {
+      setPm25Info({ status: "보통", class: "text-black" });
+    } else if (info.airpollutionInfo.list[0].components.pm2_5 < 75) {
+      setPm25Info({ status: "나쁨", class: "text-orange-500" });
+    } else {
+      setPm25Info({ status: "매우 나쁨", class: "text-red-500" });
+    }
+  }, [info.airpollutionInfo]);
+
   const scrollbarRef = useRef();
   useEffect(() => {
     var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -54,11 +79,25 @@ const CardMain = ({ info }) => {
           </div>
           <div className="w-full h-[40rem] grid grid-rows-4 grid-cols-6 gap-4 mt-4">
             <div className="row-span-3 col-span-2 bg-red-400 rounded-md">01</div>
-            <div className="col-span-2 bg-red-400 rounded-md">대기질</div>
+            <div className="col-span-2 bg-blue-300 rounded-md relative">
+              <div className="top-1 left-2 absolute text-white text-sm">미세먼지 정보</div>
+              <div className="flex items-center justify-center h-full pt-4">
+                <div className="flex-1 text-center">
+                  <div className="">미세먼지</div>
+                  <div className={`font-bold text-lg my-2 ${pm10Info.class}`}>{pm10Info.status}</div>
+                  <div>{info.airpollutionInfo.list[0].components.pm10}㎍/㎥</div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div>초미세먼지</div>
+                  <div className={`font-bold text-lg my-2 ${pm25Info.class}`}>{pm25Info.status}</div>
+                  <div>{info.airpollutionInfo.list[0].components.pm2_5}㎍/㎥</div>
+                </div>
+              </div>
+            </div>
             <div className="row-span-2 col-span-2 bg-red-400 rounded-md">02</div>
             <div className="col-span-2 bg-red-400 rounded-md">바람</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
+            <div className="bg-red-400 rounded-md">자외선</div>
+            <div className="bg-red-400 rounded-md">강수량</div>
             <div className="bg-red-400 rounded-md">정사각형</div>
             <div className="bg-red-400 rounded-md">정사각형</div>
             <div className="col-span-2 bg-red-400 rounded-md">정사각형</div>

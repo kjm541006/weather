@@ -10,6 +10,7 @@ export default function Main() {
   const [locInfo, setLocInfo] = useState({}); // [city, country]
   const [weatherInfo, setWeatherInfo] = useState({}); // [temperature, weather]
   const [forecastInfo, setForecastInfo] = useState({});
+  const [airpollutionInfo, setAirpollutionInfo] = useState({}); // [airPollutionInfo]
   const [city, setCity] = useState("");
   const [isCityExist, setIsCityExist] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -79,9 +80,9 @@ export default function Main() {
             const geoInfoResponse = axios.get(`api/geoInfo?lat=${lat}&lng=${lng}`);
             const weatherResponse = axios.get(`/api/weatherInfo?lat=${lat}&lng=${lng}`);
             const forecastResponse = axios.get(`/api/forecastInfo?lat=${lat}&lng=${lng}`);
-            // const airPollutionResponse = axios.get(`/api/airPollutionInfo?lat=${lat}&lng=${lng}`);
+            const airpollutionResponse = axios.get(`/api/airpollutionInfo?lat=${lat}&lng=${lng}`);
 
-            const responses = await Promise.all([geoInfoResponse, weatherResponse, forecastResponse]);
+            const responses = await Promise.all([geoInfoResponse, weatherResponse, forecastResponse, airpollutionResponse]);
 
             console.log("위도 경도로 도시 및 국가 주소 정보 받아오기 google geolocation");
             console.log(responses[0].data);
@@ -100,6 +101,11 @@ export default function Main() {
             console.log("위도 경도로 날씨 예보 (5일 3시간 간격 정보) 받아오기 openweathermap");
             console.log(responses[2].data);
             setForecastInfo(responses[2].data);
+
+            console.log("위도 경도로 대기 오염 정보 받아오기 openweathermap");
+            console.log(responses[3].data);
+            setAirpollutionInfo(responses[3].data);
+
             setIsLoading(false); // 모든 요청이 완료되면 isLoading을 false로 설정
           } catch (error) {
             console.log(error);
@@ -119,7 +125,7 @@ export default function Main() {
           {/* <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} isMyLoc={isMyLoc} city={city} setCity={setCity} setIsCityExist={setIsCityExist}  /> */}
           <Header info={{ setGeoLocation, setIsMyLoc, isMyLoc, city, setCity, setIsCityExist, setIsLoading }} />
           <Card
-            info={{ geoLocation, locInfo, weatherInfo, isMyLoc, city, isCityExist, forecastInfo }}
+            info={{ geoLocation, locInfo, weatherInfo, isMyLoc, city, isCityExist, forecastInfo, airpollutionInfo }}
             className="flex items-center justify-center"
           />
         </div>

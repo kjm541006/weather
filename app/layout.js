@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className="h-screen bg-blue-500 relative">
+    <html lang="ko" className="h-screen bg-blue-400 relative">
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
