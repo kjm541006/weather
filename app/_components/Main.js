@@ -94,7 +94,7 @@ export default function Main() {
             console.log("위도 경도로 날씨 정보 받아오기 openweathermap");
             console.log(responses[1].data);
             setWeatherInfo({
-              temperature: responses[1].data.main.temp,
+              temperature: responses[1].data.main,
               weather: responses[1].data.weather[0].main,
             });
 

@@ -79,8 +79,9 @@ const CardMain = ({ info }) => {
           </div>
           <div className="w-full h-[40rem] grid grid-rows-4 grid-cols-6 gap-4 mt-4">
             <div className="row-span-3 col-span-2 bg-red-400 rounded-md">01</div>
-            <div className="col-span-2 bg-blue-300 rounded-md relative">
-              <div className="top-1 left-2 absolute text-white text-sm">미세먼지 정보</div>
+            {/* 미세먼지 정보 */}
+            <div className="col-span-2 bg-blue-400 rounded-md relative">
+              <div className="top-1 left-1 absolute text-white text-sm text-bold">미세먼지 정보</div>
               <div className="flex items-center justify-center h-full pt-4">
                 <div className="flex-1 text-center">
                   <div className="">미세먼지</div>
@@ -98,8 +99,12 @@ const CardMain = ({ info }) => {
             <div className="col-span-2 bg-red-400 rounded-md">바람</div>
             <div className="bg-red-400 rounded-md">자외선</div>
             <div className="bg-red-400 rounded-md">강수량</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
+            {/* 체감온도 */}
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">체감온도</div>
+              <div className="text-white text-3xl text-bold mt-1 ml-3">{Math.round(info.weatherInfo.temperature.feels_like) + "°C"}</div>
+            </div>
+            <div className="bg-red-400 rounded-md">체감온도</div>
             <div className="col-span-2 bg-red-400 rounded-md">정사각형</div>
             <div className="bg-red-400 rounded-md">정사각형</div>
             <div className="bg-red-400 rounded-md">정사각형</div>

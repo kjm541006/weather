@@ -16,7 +16,7 @@ const CardHeader = ({ info }) => {
           {info.weatherInfo.weather === "Drizzle" && <img src="/images/drizzle.png" className="w-32 h-32" alt="이슬비" />}
           {/* {info.weatherInfo.weather === "Clouds" && <img src="/images/clouds.png" className="w-32 h-32" alt="구름" />} */}
           {/* {info.weatherInfo.weather === "Clouds" && <img src="/images/clouds.png" className="w-32 h-32" alt="구름" />} */}
-          <p className="text-4xl">{Math.round(info.weatherInfo.temperature) + "°C" || "알 수 없음"}</p>
+          <p className="text-4xl">{Math.round(info.weatherInfo.temperature.temp) + "°C" || "알 수 없음"}</p>
         </>
       ) : (
         <p>도시 및 국가를 찾지 못했습니다.</p>
