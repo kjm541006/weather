@@ -8,9 +8,12 @@ export default function Main() {
   const [isMyLoc, setIsMyLoc] = useState(true);
   const [geoLocation, setGeoLocation] = useState({});
   const [locInfo, setLocInfo] = useState({}); // [city, country]
+  const [accuLocInfo, setAccuLocInfo] = useState(""); // accuweatherapi에서 받아온 location
   const [weatherInfo, setWeatherInfo] = useState({}); // [temperature, weather]
   const [forecastInfo, setForecastInfo] = useState({});
   const [airpollutionInfo, setAirpollutionInfo] = useState({}); // [airPollutionInfo]
+  const [accuGeoLocation, setAccuGeoLocation] = useState(""); // accuweatherapi에서 받아온 CityCode
+  const [accuOnedayInfo, setAccuOnedayInfo] = useState({}); // accuweatherapi에서 받아온 1일 예보
   const [city, setCity] = useState("");
   const [isCityExist, setIsCityExist] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,46 +37,6 @@ export default function Main() {
       const lng = geoLocation.lng;
 
       if (lat && lng) {
-        // 도시 국가 정보 받아오기
-        // const fetchWeather = async () => {
-        //   axios
-        //     .get(`api/geoInfo?lat=${lat}&lng=${lng}`)
-        //     .then((response) => {
-        //       console.log("위도 경도로 도시 및 국가 주소 정보 받아오기 google geolocation");
-        //       console.log(response.data);
-        //       setLocInfo({
-        //         city: response.data.results[0]?.formatted_address,
-        //         country: response.data.results[response.data.results.length - 1]?.formatted_address,
-        //       });
-        //     })
-        //     .catch((error) => {
-        //       console.log(error + "에러발생");
-        //     });
-        //   // 위도 경도로 날씨 정보 받아오기
-        //   axios
-        //     .get(`/api/weatherInfo?lat=${lat}&lng=${lng}`)
-        //     .then((response) => {
-        //       console.log("위도 경도로 날씨 정보 받아오기 openweathermap");
-        //       console.log(response.data);
-        //       setWeatherInfo({
-        //         temperature: response.data.main.temp,
-        //         weather: response.data.weather[0].main,
-        //       });
-        //     })
-        //     .catch((error) => {
-        //       console.log(error);
-        //     });
-        //   // 위도 경도로 날씨 예보 (5일 3시간 간격 정보) 받아오기
-        //   axios
-        //     .get(`/api/forecastInfo?lat=${lat}&lng=${lng}`)
-        //     .then((response) => {
-        //       console.log("위도 경도로 날씨 예보 (5일 3시간 간격 정보) 받아오기 openweathermap");
-        //       console.log(response.data);
-        //     })
-        //     .catch((error) => {
-        //       console.log(error);
-        //     });
-        // };
         const fetchWeather = async () => {
           setIsLoading(true);
           try {
@@ -81,8 +44,21 @@ export default function Main() {
             const weatherResponse = axios.get(`/api/weatherInfo?lat=${lat}&lng=${lng}`);
             const forecastResponse = axios.get(`/api/forecastInfo?lat=${lat}&lng=${lng}`);
             const airpollutionResponse = axios.get(`/api/airpollutionInfo?lat=${lat}&lng=${lng}`);
+            const accuGeoLocationResponse = axios.get(`/api/accugeopositionInfo?lat=${lat}&lng=${lng}`);
+            // const accuOnedayResponse = axios.get(`/api/accuonedayInfo?locationKey=${accuGeoLocation}`);
 
-            const responses = await Promise.all([geoInfoResponse, weatherResponse, forecastResponse, airpollutionResponse]);
+            const responses = await Promise.all([
+              geoInfoResponse,
+              weatherResponse,
+              forecastResponse,
+              airpollutionResponse,
+              accuGeoLocationResponse,
+            ]);
+
+            const accuGeoLocationKey = responses[4].data.Key;
+            const accuOnedayResponse = await axios.get(`/api/accuonedayInfo?locationKey=${accuGeoLocationKey}`);
+
+            responses.push(accuOnedayResponse);
 
             console.log("위도 경도로 도시 및 국가 주소 정보 받아오기 google geolocation");
             console.log(responses[0].data);
@@ -106,6 +82,16 @@ export default function Main() {
             console.log(responses[3].data);
             setAirpollutionInfo(responses[3].data);
 
+            console.log("accuweatherapi의 위도 경도로 CityCode 받아오기");
+            console.log(responses[4].data);
+            console.log(responses[4].data.Key);
+            setAccuGeoLocation(responses[4].data.Key);
+            setAccuLocInfo(responses[4].data.LocalizedName);
+
+            console.log("accuweatherapi의 CityCode로 1일 예보 받아오기");
+            console.log(responses[5].data);
+            setAccuOnedayInfo(responses[5].data);
+
             setIsLoading(false); // 모든 요청이 완료되면 isLoading을 false로 설정
           } catch (error) {
             console.log(error);
@@ -125,7 +111,19 @@ export default function Main() {
           {/* <Header setGeoLocation={setGeoLocation} setIsMyLoc={setIsMyLoc} isMyLoc={isMyLoc} city={city} setCity={setCity} setIsCityExist={setIsCityExist}  /> */}
           <Header info={{ setGeoLocation, setIsMyLoc, isMyLoc, city, setCity, setIsCityExist, setIsLoading }} />
           <Card
-            info={{ geoLocation, locInfo, weatherInfo, isMyLoc, city, isCityExist, forecastInfo, airpollutionInfo }}
+            info={{
+              geoLocation,
+              locInfo,
+              weatherInfo,
+              isMyLoc,
+              city,
+              isCityExist,
+              forecastInfo,
+              airpollutionInfo,
+              accuGeoLocation,
+              accuOnedayInfo,
+              accuLocInfo,
+            }}
             className="flex items-center justify-center"
           />
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./CardMainStyle.css";
 
 const CardMain = ({ info }) => {
-  const countryCode = info.forecastInfo.city.country;
+  // const countryCode = info.forecastInfo.city.country;
   const timeZone = info.forecastInfo.city.timezone;
   const [pm10Info, setPm10Info] = useState({});
   const [pm25Info, setPm25Info] = useState({});
@@ -78,7 +78,26 @@ const CardMain = ({ info }) => {
             })}
           </div>
           <div className="w-full h-[40rem] grid grid-rows-4 grid-cols-6 gap-4 mt-4">
-            <div className="row-span-3 col-span-2 bg-red-400 rounded-md">01</div>
+            <div className="row-span-3 col-span-2 bg-blue-400 rounded-md">01</div>
+            {/* 일교차 */}
+            <div className="col-span-2 bg-blue-400 rounded-md relative">
+              <div className="top-1 left-1 absolute text-white text-sm text-bold">일교차</div>
+              <div className="flex items-center justify-center h-full pt-4">
+                <div className="flex-1 text-center">
+                  <div>최고기온</div>
+                  <div className="font-bold text-lg my-2">
+                    {Math.round(info.accuOnedayInfo.DailyForecasts[0].Temperature.Maximum.Value)}°C
+                  </div>
+                </div>
+                <div className="flex-1 text-center">
+                  <div>최저기온</div>
+                  <div className="font-bold text-lg my-2">
+                    {Math.round(info.accuOnedayInfo.DailyForecasts[0].Temperature.Minimum.Value)}°C
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row-span-2 col-span-2 bg-red-400 rounded-md">02</div>
             {/* 미세먼지 정보 */}
             <div className="col-span-2 bg-blue-400 rounded-md relative">
               <div className="top-1 left-1 absolute text-white text-sm text-bold">미세먼지 정보</div>
@@ -95,9 +114,10 @@ const CardMain = ({ info }) => {
                 </div>
               </div>
             </div>
-            <div className="row-span-2 col-span-2 bg-red-400 rounded-md">02</div>
-            <div className="col-span-2 bg-red-400 rounded-md">바람</div>
-            <div className="bg-red-400 rounded-md">자외선</div>
+            <div className="bg-red-400 rounded-md">
+              <div>습도</div>
+              <div>{info.weatherInfo.temperature.humidity}%</div>
+            </div>
             <div className="bg-red-400 rounded-md">강수량</div>
             {/* 체감온도 */}
             <div className="bg-blue-400 rounded-md">

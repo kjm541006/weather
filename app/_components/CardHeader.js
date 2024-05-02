@@ -8,6 +8,7 @@ const CardHeader = ({ info }) => {
       {info.isCityExist ? (
         <>
           <h2>{info.locInfo.city}</h2>
+          {info.isMyLoc && <h2>{info.accuLocInfo}</h2>}
           {/* <p>{info.weatherInfo.weather || "알 수 없음"}</p>{" "} */}
           {info.weatherInfo.weather === "Clouds" && <img src="/images/clouds.png" className="w-32 h-32" alt="구름" />}
           {info.weatherInfo.weather === "Snow" && <img src="/images/snow.png" className="w-32 h-32" alt="눈" />}
