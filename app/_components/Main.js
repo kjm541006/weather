@@ -47,7 +47,7 @@ export default function Main() {
             const accuGeoLocationResponse = axios.get(`/api/accugeopositionInfo?lat=${lat}&lng=${lng}`);
             // const accuOnedayResponse = axios.get(`/api/accuonedayInfo?locationKey=${accuGeoLocation}`);
 
-            const responses = await Promise.all([
+            const responses = await Promise.allSettled([
               geoInfoResponse,
               weatherResponse,
               forecastResponse,
@@ -55,7 +55,7 @@ export default function Main() {
               accuGeoLocationResponse,
             ]);
 
-            const accuGeoLocationKey = responses[4].data.Key;
+            const accuGeoLocationKey = responses[4].data?.Key;
             const accuOnedayResponse = await axios.get(`/api/accuonedayInfo?locationKey=${accuGeoLocationKey}`);
 
             responses.push(accuOnedayResponse);
@@ -92,9 +92,11 @@ export default function Main() {
             console.log(responses[5].data);
             setAccuOnedayInfo(responses[5].data);
 
-            setIsLoading(false); // 모든 요청이 완료되면 isLoading을 false로 설정
+            // setIsLoading(false); // 모든 요청이 완료되면 isLoading을 false로 설정
           } catch (error) {
             console.log(error);
+          } finally {
+            setIsLoading(false);
           }
         };
 
