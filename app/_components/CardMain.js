@@ -7,6 +7,31 @@ const CardMain = ({ info }) => {
   const [pm10Info, setPm10Info] = useState({});
   const [pm25Info, setPm25Info] = useState({});
 
+  const sunriseString = info.accuOnedayInfo.DailyForecasts[0].Sun.Rise;
+  const sunriseDate = new Date(sunriseString);
+  const sunriseTime = sunriseDate.toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const sunsetString = info.accuOnedayInfo.DailyForecasts[0].Sun.Set;
+  const sunsetDate = new Date(sunriseString);
+  const sunsetTime = sunsetDate.toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const moonriseString = info.accuOnedayInfo.DailyForecasts[0].Moon.Rise;
+  const moonriseDate = new Date(moonriseString);
+  const moonriseTime = moonriseDate.toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const moonsetString = info.accuOnedayInfo.DailyForecasts[0].Moon.Set;
+  const moonsetDate = new Date(moonsetString);
+  const moonsetTime = moonsetDate.toLocaleTimeString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   useEffect(() => {
     if (info.airpollutionInfo.list[0].components.pm10 < 30) {
       setPm10Info({ status: "좋음", class: "text-blue-500" });
@@ -30,6 +55,7 @@ const CardMain = ({ info }) => {
   }, [info.airpollutionInfo]);
 
   const scrollbarRef = useRef();
+
   useEffect(() => {
     var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     if (isSafari) {
@@ -114,22 +140,39 @@ const CardMain = ({ info }) => {
                 </div>
               </div>
             </div>
-            <div className="bg-red-400 rounded-md">
-              <div>습도</div>
-              <div>{info.weatherInfo.temperature.humidity}%</div>
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">습도</div>
+              <div className="text-white text-3xl text-bold mt-1 ml-3">{info.weatherInfo.temperature.humidity}%</div>
             </div>
             <div className="bg-red-400 rounded-md">강수량</div>
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">강수확률</div>
+              <div className="text-white text-3xl text-bold mt-1 ml-3">
+                {Math.round(info.accuOnedayInfo.DailyForecasts[0].Day.RainProbability) + "%"}
+              </div>
+            </div>
             {/* 체감온도 */}
             <div className="bg-blue-400 rounded-md">
               <div className="text-white text-sm text-bold mt-1 ml-1">체감온도</div>
               <div className="text-white text-3xl text-bold mt-1 ml-3">{Math.round(info.weatherInfo.temperature.feels_like) + "°C"}</div>
             </div>
-            <div className="bg-red-400 rounded-md">체감온도</div>
             <div className="col-span-2 bg-red-400 rounded-md">정사각형</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
-            <div className="bg-red-400 rounded-md">정사각형</div>
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">일출</div>
+              <div className="text-white text-2xl text-bold mt-1 ml-3">{sunriseTime}</div>
+            </div>
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">일몰</div>
+              <div className="text-white text-2xl text-bold mt-1 ml-3">{sunsetTime}</div>
+            </div>
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">월출</div>
+              <div className="text-white text-2xl text-bold mt-1 ml-3">{moonriseTime}</div>
+            </div>
+            <div className="bg-blue-400 rounded-md">
+              <div className="text-white text-sm text-bold mt-1 ml-1">월몰</div>
+              <div className="text-white text-2xl text-bold mt-1 ml-3">{moonsetTime}</div>
+            </div>
           </div>
         </>
       )}
